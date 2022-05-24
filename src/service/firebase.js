@@ -11,7 +11,7 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_FIREBASE_DB_URL,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
 };
-console.log(process.env.REACT_APP_FIREBASE_API_KEY); // 이렇게요
+
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 export default firebaseApp;
