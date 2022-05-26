@@ -6,50 +6,32 @@ import Header from "../header/header";
 import Preview from "../preview/preview";
 import styles from "./maker.module.css";
 
-const Maker = ({ FileInput, authService }) => {
-  const [cards, setCards] = useState({
-    1: {
-      id: "1",
-      name: "Noah",
-      company: "samsung",
-      theme: "dark",
-      title: "software Engineer",
-      email: "Noah@gmail.com",
-      message: "go for it",
-      fileName: "Noah",
-      fileURL: null,
-    },
-    2: {
-      id: "2",
-      name: "Noah2",
-      company: "samsung2",
-      theme: "light",
-      title: "software Engineer2",
-      email: "Noah@gmail.com2",
-      message: "go for it2",
-      fileName: "Noah2",
-      fileURL: "Noah.png2",
-    },
-    3: {
-      id: "3",
-      name: "Noah3",
-      company: "samsung3",
-      theme: "colorful",
-      title: "software Engineer3",
-      email: "Noah@gmail.com3",
-      message: "go for it3",
-      fileName: "Noah3",
-      fileURL: null,
-    },
-  });
-
+const Maker = ({ FileInput, authService, cardRepository }) => {
   const history = useHistory();
+  const historyState = history?.location?.state;
+  const [cards, setCards] = useState({});
+  const [userId, setUserId] = useState(historyState && historyState.id);
+
   const onLogout = () => {
     authService.logout();
   };
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    const stopSync = cardRepository.syncCards(userId, (cards) => {
+      setCards(cards);
+    });
+    return () => {
+      stopSync(); //component가 Unmount 되었을 때, 불필요한 네트워크를 최소화한다.
+    };
+  }, [userId]);
+
+  useEffect(() => {
     authService.onAuthChange((user) => {
-      if (!user) {
+      if (user) {
+        setUserId(user.uid);
+      } else {
         history.push("/");
       }
     });
@@ -61,6 +43,7 @@ const Maker = ({ FileInput, authService }) => {
       updated[card.id] = card;
       return updated;
     });
+    cardRepository.saveCard(userId, card);
   };
 
   const deleteCard = (card) => {
@@ -69,6 +52,7 @@ const Maker = ({ FileInput, authService }) => {
       delete updated[card.id];
       return updated;
     });
+    cardRepository.removeCard(userId, card);
   };
 
   return (
