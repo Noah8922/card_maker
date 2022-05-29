@@ -25,7 +25,7 @@ const Maker = ({ FileInput, authService, cardRepository }) => {
     return () => {
       stopSync(); //component가 Unmount 되었을 때, 불필요한 네트워크를 최소화한다.
     };
-  }, [userId]);
+  }, [userId, cardRepository]);
 
   useEffect(() => {
     authService.onAuthChange((user) => {
