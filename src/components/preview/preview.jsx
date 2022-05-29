@@ -13,4 +13,4 @@ const Preview = ({ cards }) => (
   </section>
 );
 
-export default Preview;
+export default React.memo(Preview);
