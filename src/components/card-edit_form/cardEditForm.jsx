@@ -83,4 +83,4 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
   );
 };
 
-export default CardEditForm;
+export default React.memo(CardEditForm);
