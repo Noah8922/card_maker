@@ -10,7 +10,7 @@
 
 ### 소셜 로그인 구현
 
-- firebase 기반의 google, github API
+- firebase google, github API를 이용한 소셜 로그인 구현
 
 ### 명함 만들기
 
