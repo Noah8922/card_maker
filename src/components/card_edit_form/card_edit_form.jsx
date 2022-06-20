@@ -1,12 +1,18 @@
-import React from "react";
-import Button from "../button/button";
-import styles from "./cardEditForm.module.css";
+import React, { memo, useRef } from 'react';
+import styles from './card_edit_form.module.css';
+import Button from '../button/button';
 
-const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
+const CardEditForm = memo(({ FileInput, card, updateCard, deleteCard }) => {
+  const nameRef = useRef();
+  const companyRef = useRef();
+  const themeRef = useRef();
+  const titleRef = useRef();
+  const emailRef = useRef();
+  const messageRef = useRef();
+
   const { name, company, title, email, message, theme, fileName } = card;
 
-  const onFileChange = (file) => {
-    console.log(file);
+  const onFileChange = file => {
     updateCard({
       ...card,
       fileName: file.name,
@@ -14,26 +20,28 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
     });
   };
 
-  const onChange = (e) => {
-    if (e.currentTarget === null) {
+  const onChange = event => {
+    if (event.currentTarget == null) {
       return;
     }
-    e.preventDefault();
+    event.preventDefault();
     updateCard({
       ...card,
-      [e.currentTarget.name]: e.currentTarget.value,
+      [event.currentTarget.name]: event.currentTarget.value,
     });
   };
 
   const onSubmit = () => {
     deleteCard(card);
   };
+
   return (
     <form className={styles.form}>
       <input
         className={styles.input}
         type="text"
         name="name"
+        ref={nameRef}
         value={name}
         onChange={onChange}
       />
@@ -41,12 +49,14 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
         className={styles.input}
         type="text"
         name="company"
+        ref={companyRef}
         value={company}
         onChange={onChange}
       />
       <select
         className={styles.select}
         name="theme"
+        ref={themeRef}
         value={theme}
         onChange={onChange}
       >
@@ -58,6 +68,7 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
         className={styles.input}
         type="text"
         name="title"
+        ref={titleRef}
         value={title}
         onChange={onChange}
       />
@@ -65,11 +76,13 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
         className={styles.input}
         type="text"
         name="email"
+        ref={emailRef}
         value={email}
         onChange={onChange}
       />
       <textarea
         className={styles.textarea}
+        ref={messageRef}
         name="message"
         value={message}
         onChange={onChange}
@@ -80,6 +93,6 @@ const CardEditForm = ({ FileInput, card, updateCard, deleteCard }) => {
       <Button name="Delete" onClick={onSubmit} />
     </form>
   );
-};
+});
 
-export default React.memo(CardEditForm);
+export default CardEditForm;

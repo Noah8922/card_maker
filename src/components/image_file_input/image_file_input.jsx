@@ -1,22 +1,25 @@
-import React, { useRef, useState } from "react";
-import styles from "./image_file_input.module.css";
+import React, { memo, useRef, useState } from 'react';
+import styles from './image_file_input.module.css';
 
-const ImageFileInput = ({ imageUploader, name, onFileChange }) => {
+const ImageFileInput = memo(({ imageUploader, name, onFileChange }) => {
   const [loading, setLoading] = useState(false);
+
   const inputRef = useRef();
-  const onButtonClick = (e) => {
-    e.preventDefault();
+  const onButtonClick = event => {
+    event.preventDefault();
     inputRef.current.click();
   };
-  const onChange = async (e) => {
+
+  const onChange = async event => {
     setLoading(true);
-    const uploaded = await imageUploader.upload(e.target.files[0]);
+    const uploaded = await imageUploader.upload(event.target.files[0]);
     setLoading(false);
     onFileChange({
       name: uploaded.original_filename,
       url: uploaded.url,
     });
   };
+
   return (
     <div className={styles.container}>
       <input
@@ -32,12 +35,12 @@ const ImageFileInput = ({ imageUploader, name, onFileChange }) => {
           className={`${styles.button} ${name ? styles.pink : styles.grey}`}
           onClick={onButtonClick}
         >
-          {name || "No FIle"}
+          {name || 'No file'}
         </button>
       )}
       {loading && <div className={styles.loading}></div>}
     </div>
   );
-};
+});
 
-export default React.memo(ImageFileInput);
+export default ImageFileInput;
